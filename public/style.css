@@ -1,0 +1,55 @@
+@import url('https://fonts.googleapis.com/css?family=Pacifico');
+.btn:focus, .btn-shorten:focus{
+  outline: 0 !important;
+}
+
+html,
+body {
+  height: 100%;
+  background-color: #232323;
+}
+
+.header{
+  font-family: "Pacifico";
+  padding-top: 10%;
+}
+
+body {
+  color: #DDDDDD;
+  text-align: center;
+  font-family: 'Raleway', sans-serif;
+}
+
+.container {
+  border-radius: 5px;
+  height: 15%;
+  padding: 2.5%;
+  margin: 5% auto;
+  text-align: center;
+}
+
+.btn-shorten {
+  color: #ffffff;
+  background-color: #DD7777;
+  border: none;
+}
+
+.btn-shorten:hover,
+.btn-shorten:focus,
+.btn-shorten:active,
+.btn-shorten.active {
+  color: #ffffff;
+  background-color: #FF5555;
+  border: none;
+}
+
+#link {
+  display: none;
+  padding-top: 15px;
+}
+
+#link a{
+  color: #F89406;
+  font-size: 1.5em;
+  margin-right: 20px;
+}

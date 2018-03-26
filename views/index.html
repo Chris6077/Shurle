@@ -1,0 +1,42 @@
+<!-- This is a static file -->
+<!-- served from your routes in server.js -->
+
+<!-- You might want to try something fancier: -->
+<!-- html/nunjucks docs: https://mozilla.github.io/nunjucks/ -->
+<!-- pug: https://pugjs.org/ -->
+<!-- haml: http://haml.info/ -->
+<!-- hbs(handlebars): http://handlebarsjs.com/ -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Shurle - URL Shrink</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link href="/style.css" rel="stylesheet">
+    <link rel="icon" href="https://raw.githubusercontent.com/Chris6077/Portfolio/master/images/logo.png">
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="/client.js"></script>
+  </head>
+  <body>
+    <div class="header">
+      <h1>
+        Shurle
+      </h1>
+      <h3>
+        Url Shrink
+      </h3>
+    </div>
+    <div class="container">
+      <div class="input-group input-group-lg">
+        <input id="url-field" type="text" class="form-control" placeholder="Paste a link...">
+        <span class="input-group-btn">
+          <button class="btn btn-shorten" type="button">SHORTEN</button>
+        </span>
+      </div>
+      <div id="link"></div>
+    </div>
+  </body>
+</html>
