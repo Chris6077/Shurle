@@ -1,4 +1,4 @@
-# Short-URL
+# Shurle
 Shortens your url
 ### Click [here](https://shurle.glitch.me/) to check it out!
 
