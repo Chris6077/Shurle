@@ -21,19 +21,62 @@ app.get("/", (request, response) => {
   response.sendFile(__dirname + '/views/index.html')
 })
 
-app.get('/new/:url', function(req, res){
-  var oldURL = req.params.url;
-  if(oldURL == undefined || oldURL == "" || /\s/g.test(oldURL) || !/.\../g.test(oldURL)) res.json({'error': "INVALID URL"});
+app.post('/new', function(req, res){
+  var oldURL = req.body.url;
+  if(oldURL == undefined || oldURL == "" || /\s/g.test(oldURL) || !/.\../g.test(oldURL) || /\.\./g.test(oldURL)) res.json({'error': "INVALID URL"});
   else {
-    var wasHTTPS = false;
-    if(!/.\..+\./g.test(oldURL) && oldURL.substring(0,4) == "http"){
-      if(oldURL.split("//")[0] == "https:") wasHTTPS = true;
-      oldURL = oldURL.split("//")[1];
-      oldURL = "www." + oldURL;
+    if(oldURL.substring(0,5) == "http:" || oldURL.substring(0,6) == "https:" || oldURL.substring(0,7) == "mailto:" || oldURL.substring(0,5) == "news:" || oldURL.substring(0,4) == "ftp:" || oldURL.substring(0,5) == "file:"){
+      switch(oldURL.split(":")[0]){
+        case "http":  if(!/.\..+\./g.test(oldURL.split("//")[1] )) oldURL = "http://www." + oldURL.split("://")[1];
+                      break;
+        case "https": if(!/.\..+\./g.test(oldURL.split("//")[1] )) oldURL = "https://www." + oldURL.split("://")[1];
+                      break;
+        case "mailto":  if(!/[A-Za-z0-9]+\:.+@.+\../g.test(oldURL)) res.json({'error': "INVALID URL"});
+                        break;
+      }
+    } else {
+      if(!/.\..+\./g.test(oldURL)) oldURL = "www." + oldURL;
+      oldURL = "http://" + oldURL;
     }
-    else if(!/.\..+\./g.test(oldURL) && oldURL.substring(0,4) != "http") oldURL = "www." + oldURL;
-    if(oldURL.substring(0,4) != "http" && !wasHTTPS) oldURL = "http://" + oldURL;
-    if(oldURL.substring(0,4) != "http" && wasHTTPS) oldURL = "https://" + oldURL;
+    var shortUrl = '';
+    Url.findOne({oldUrl: oldURL}, function (error, url){
+      if (url){
+        shortUrl = config.webhost + url.id;
+        res.send({'shortUrl': shortUrl});
+      } else {
+        var newUrl = Url({
+          oldUrl: oldURL
+        });
+        newUrl.save(function(error) {
+          if (error){
+            console.log(error);
+          }
+          shortUrl = config.webhost + newUrl.id;
+          res.send({'shortUrl': shortUrl});
+        });
+      }
+    });
+  }
+});
+
+app.get('/new/:url*', function(req, res){
+  var oldURL = req.url.slice(5);
+  console.log(req);
+  if(oldURL == undefined || oldURL == "" || /\s/g.test(oldURL) || !/.\../g.test(oldURL) || /\.\./g.test(oldURL)) res.json({'error': "INVALID URL"});
+  else {
+    if(oldURL.substring(0,5) == "http:" || oldURL.substring(0,6) == "https:" || oldURL.substring(0,7) == "mailto:" || oldURL.substring(0,5) == "news:" || oldURL.substring(0,4) == "ftp:" || oldURL.substring(0,5) == "file:"){
+      switch(oldURL.split(":")[0]){
+        case "http":  if(!/.\..+\./g.test(oldURL.split("//")[1] )) oldURL = "http://www." + oldURL.split("://")[1];
+                      break;
+        case "https": if(!/.\..+\./g.test(oldURL.split("//")[1] )) oldURL = "https://www." + oldURL.split("://")[1];
+                      break;
+        case "mailto":  if(!/[A-Za-z0-9]+\:.+@.+\../g.test(oldURL)) res.json({'error': "INVALID URL"});
+                        break;
+      }
+    } else {
+      if(!/.\..+\./g.test(oldURL)) oldURL = "www." + oldURL;
+      oldURL = "http://" + oldURL;
+    }
     var shortUrl = '';
     Url.findOne({oldUrl: oldURL}, function (error, url){
       if (url){
@@ -57,12 +100,8 @@ app.get('/new/:url', function(req, res){
 
 app.get('/:id', function(req, res){
   var id = req.params.id;
-  console.log(id);
-  if(isNaN(id)){
-    if(!/.\..+\./g.test(id)) id = "www." + id;
-    if(id.substring(0,4) != "http") id = "http://" + id; 
-    res.status(301).redirect(id);
-  } else {
+  if(id != "favicon.ico") {
+    console.log(id);
     Url.findOne({id: id}, function (error, url){
       if (url == undefined) {
         res.redirect(config.webhost);
