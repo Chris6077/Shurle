@@ -1,36 +1,45 @@
+<!-- This is a static file -->
+<!-- served from your routes in server.js -->
+
+<!-- You might want to try something fancier: -->
+<!-- html/nunjucks docs: https://mozilla.github.io/nunjucks/ -->
+<!-- pug: https://pugjs.org/ -->
+<!-- haml: http://haml.info/ -->
+<!-- hbs(handlebars): http://handlebarsjs.com/ -->
 <!DOCTYPE html>
-	<html lang="en">
-		<head>
-			<!-- search bar from https://codepen.io/anon/pen/rOLrXm-->
-			<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-  			<title>Shurle API</title>
-  			<link rel="stylesheet" href="/style.css"/>
-  			<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-          <!-- Your web-app is https, so your scripts need to be too -->
-        <script src="https://code.jquery.com/jquery-2.2.1.min.js"
-                integrity="sha256-gvQgAFzTH6trSrAWoH1iPo9Xc96QxSZ3feW6kem+O00="
-                crossorigin="anonymous"></script>
-        <script src="/client.js"></script>
-        <link rel="icon" href="https://raw.githubusercontent.com/Chris6077/Portfolio/master/images/logo.png">
-			<style type="text/css">
-			</style>
-		</head>
-		<body>
-        <header>
-          <h1>
-            Url Shrink API
-          </h1>
-        </header>
-    		<div class="container">
-    			<h2>Example input:</h2>
-          <p>https://shurle-api.glitch.me/new/https://www.google.com</p>
-          <h2>This input will return this:</h2>
-          <p>{ "shortUrl": "shurle-api.glitch.me/1" }</p>
-  			</div>
-  			<div id="footer">
-          <div class="col-md-8">
-            <span>Copyright &copy; 2018 Christian Winkler</span>
-          </div>
-        </div>
-		</body>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Shurle - URL Shrink</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link href="/style.css" rel="stylesheet">
+    <link rel="icon" href="https://raw.githubusercontent.com/Chris6077/Portfolio/master/images/logo.png">
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="/client.js"></script>
+  </head>
+  <body>
+    <div class="header">
+      <h1>
+        Shurle
+      </h1>
+      <h3>
+        Url Shrink
+      </h3>
+      <button class="api">
+        API Usage
+      </button>
+    </div>
+    <div class="container">
+      <div class="input-group input-group-lg">
+        <input id="url-field" type="text" class="form-control" placeholder="Paste a link...">
+        <span class="input-group-btn">
+          <button class="btn btn-shorten" type="button">SHORTEN</button>
+        </span>
+      </div>
+      <div id="link"></div>
+    </div>
+  </body>
 </html>
