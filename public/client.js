@@ -29,6 +29,26 @@ $(document).ready(function(){
     if(api){
       $('.container')[0].innerHTML = '<div class="input-group input-group-lg"> <input id="url-field" type="text" class="form-control" placeholder="Paste a link..."> <span class="input-group-btn"> <button class="btn btn-shorten" type="button">SHORTEN</button> </span> </div> <div id="link"></div>';
       $('.api')[0].innerHTML = "API Usage";
+      $('.btn-shorten').on('click', function(){
+        $.ajax({
+          url: '/new',
+          type: 'POST',
+          dataType: 'JSON',
+          data: {url: $('#url-field').val()},
+          success: function(data){
+              if(data.shortUrl != undefined){
+                var resultHTML = '<a class="result" href="' + data.shortUrl + '">'
+                    + data.shortUrl + '</a>';
+                $('#link').html(resultHTML);
+                $('#link').hide().fadeIn('slow');
+              } else {
+                var resultHTML = '<p class="result">' + data.error + '</p>';
+                $('#link').html(resultHTML);
+                $('#link').hide().fadeIn('slow');
+              }
+          }
+        });
+      });
       api = false;
     }
     else {
