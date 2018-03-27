@@ -41,7 +41,7 @@ app.post('/new', function(req, res){
     var shortUrl = '';
     Url.findOne({oldUrl: oldURL}, function (error, url){
       if (url){
-        shortUrl = config.webhost + url.id;
+        shortUrl = config.webhost + url.tcID;
         res.send({'shortUrl': shortUrl});
       } else {
         var newUrl = Url({
@@ -51,7 +51,7 @@ app.post('/new', function(req, res){
           if (error){
             console.log(error);
           }
-          shortUrl = config.webhost + newUrl.id;
+          shortUrl = config.webhost + newUrl.tcID;
           res.send({'shortUrl': shortUrl});
         });
       }
@@ -80,7 +80,7 @@ app.get('/new/:url*', function(req, res){
     var shortUrl = '';
     Url.findOne({oldUrl: oldURL}, function (error, url){
       if (url){
-        shortUrl = config.webhost + url.id;
+        shortUrl = config.webhost + url.tcID;
         res.json({'shortUrl': shortUrl});
       } else {
         var newUrl = Url({
@@ -90,7 +90,7 @@ app.get('/new/:url*', function(req, res){
           if (error){
             console.log(error);
           }
-          shortUrl = config.webhost + newUrl.id;
+          shortUrl = config.webhost + newUrl.tcID;
           res.json({'shortUrl': shortUrl});
         });
       }
@@ -101,8 +101,7 @@ app.get('/new/:url*', function(req, res){
 app.get('/:id', function(req, res){
   var id = req.params.id;
   if(id != "favicon.ico") {
-    console.log(id);
-    Url.findOne({id: id}, function (error, url){
+    Url.findOne({tcID: id}, function (error, url){
       if (url == undefined) {
         res.redirect(config.webhost);
       } else {

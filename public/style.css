@@ -47,7 +47,8 @@ body {
 #link {
   margin-top: 5%;
   display: none;
-  padding-top: 15px;
+  background-color: #DD4343;
+  border-radius: 5px;
 }
 
 #link a{
