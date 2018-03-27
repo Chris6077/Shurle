@@ -23,7 +23,7 @@ app.get("/", (request, response) => {
 
 app.post('/new', function(req, res){
   var oldURL = req.body.url;
-  if(oldURL == undefined || oldURL == "" || /\s/g.test(oldURL)) res.send({'error': "INVALID URL"});
+  if(oldURL == undefined || oldURL == "" || /\s/g.test(oldURL) || !/.\../g.test(oldURL)) res.send({'error': "INVALID URL"});
   else {
     var wasHTTPS = false;
     if(!/.\..+\./g.test(oldURL) && oldURL.substring(0,4) == "http"){
