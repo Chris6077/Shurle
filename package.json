@@ -23,6 +23,9 @@
   "keywords": [
     "node",
     "glitch",
-    "express"
+    "express",
+    "mongoDB",
+    "mongoose",
+    "mongoose-sequence"
   ]
 }
