@@ -1,55 +1,57 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat');
 @import url('https://fonts.googleapis.com/css?family=Pacifico');
-.btn:focus, .btn-shorten:focus{
-  outline: 0 !important;
+* {
+  margin: 0;
 }
-
-html,
+html {
+  width: 1080px;
+  margin: 0 auto;
+}
 body {
-  height: 100%;
-  background-color: #232323;
+  background-color: #242424;
 }
-
-.header{
-  font-family: "Pacifico";
-  padding-top: 10%;
-}
-
-body {
+.by {
+  text-align: right;
   color: #DDDDDD;
-  text-align: center;
-  font-family: 'Raleway', sans-serif;
-}
-
-.container {
+  background-color: #242424;
   border-radius: 5px;
-  height: 15%;
   padding: 2.5%;
+  height: 50px;
   margin: 5% auto;
+}
+.container {
+  background-color: #434343;
+  border-radius: 5px;
+  padding: 2.5%;
+  height: 100%;
+  margin: 5% auto;
+  margin-top: 10%;
+  padding-top: 7.5%;
+  padding-bottom: 7.5%;
   text-align: center;
 }
-
-.btn-shorten {
-  color: #ffffff;
-  background-color: #DD7777;
-  border: none;
+.col-md-8 {
+  color: white;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  vertical-align: baseline;
+  display: block;
+  margin-top: 15%;
 }
-
-.btn-shorten:hover,
-.btn-shorten:focus,
-.btn-shorten:active,
-.btn-shorten.active {
-  color: #ffffff;
-  background-color: #FF5555;
-  border: none;
+h1 {
+  color: #DDDDDD;
 }
-
-#link {
-  display: none;
-  padding-top: 15px;
+h2 {
+  color: #DDDDDD;
+  margin: 1.5%;
 }
-
-#link a{
-  color: #F89406;
-  font-size: 1.5em;
-  margin-right: 20px;
+p {
+  background-color: #DD4343;
+  width: 100%;
+}
+header {
+  text-align: center;
+  padding-top: 10%;
 }

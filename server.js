@@ -21,9 +21,9 @@ app.get("/", (request, response) => {
   response.sendFile(__dirname + '/views/index.html')
 })
 
-app.post('/new', function(req, res){
-  var oldURL = req.body.url;
-  if(oldURL == undefined || oldURL == "" || /\s/g.test(oldURL) || !/.\../g.test(oldURL)) res.send({'error': "INVALID URL"});
+app.get('/new/:url', function(req, res){
+  var oldURL = req.params.url;
+  if(oldURL == undefined || oldURL == "" || /\s/g.test(oldURL) || !/.\../g.test(oldURL)) res.json({'error': "INVALID URL"});
   else {
     var wasHTTPS = false;
     if(!/.\..+\./g.test(oldURL) && oldURL.substring(0,4) == "http"){
@@ -38,7 +38,7 @@ app.post('/new', function(req, res){
     Url.findOne({oldUrl: oldURL}, function (error, url){
       if (url){
         shortUrl = config.webhost + url.id;
-        res.send({'shortUrl': shortUrl});
+        res.json({'shortUrl': shortUrl});
       } else {
         var newUrl = Url({
           oldUrl: oldURL
@@ -48,7 +48,7 @@ app.post('/new', function(req, res){
             console.log(error);
           }
           shortUrl = config.webhost + newUrl.id;
-          res.send({'shortUrl': shortUrl});
+          res.json({'shortUrl': shortUrl});
         });
       }
     });

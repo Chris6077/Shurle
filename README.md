@@ -1,5 +1,4 @@
-# Shurle
-Shortens your url
-### Click [here](https://shurle.glitch.me/) to check it out!
-
+# Shurle-API
+API for URL Shrink
+### Click [here](https://shurle-api.glitch.me/) to check it out!
 Config and schema are private to secure my MongoDB data.
