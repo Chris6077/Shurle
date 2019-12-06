@@ -7,31 +7,35 @@ const app = express();
 var path = require('path');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
-var config = require('./config');
 var Url = require('./models/schemas');
+var cors = require('cors');
 
-mongoose.connect(config.db.host);
+mongoose.connect(process.env.CONN);
 
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static('public'))
 
+app.options('*', cors()) // include before other routes
+
 app.get("/", (request, response) => {
-  response.sendFile(__dirname + '/views/index.html')
+  response.status(201).sendFile(__dirname + '/views/index.html')
 })
 
 app.post('/new', function(req, res){
+  console.log(req.body);
   var oldURL = req.body.url;
-  if(oldURL == undefined || oldURL == "" || /\s/g.test(oldURL) || !/.\../g.test(oldURL) || /\.\./g.test(oldURL)) res.json({'error': "INVALID URL"});
+  if(oldURL == undefined || oldURL == "" || /\s/g.test(oldURL) || !/.\../g.test(oldURL) || /\.\./g.test(oldURL)) res.status(406).json({'error': "INVALID URL"});
   else {
-    if(oldURL.substring(0,5) == "http:" || oldURL.substring(0,6) == "https:" || oldURL.substring(0,7) == "mailto:" || oldURL.substring(0,5) == "news:" || oldURL.substring(0,4) == "ftp:" || oldURL.substring(0,5) == "file:"){
+    if(oldURL.substring(0,5) == "http:" || oldURL.substring(0,6) == "https:" || oldURL.substring(0,7) == "mailto:" || oldURL.substring(0,5) == "news:" || oldURL.substring(0,4) == "ftp:" || oldURL.substring(0,5) == "file:") {
       switch(oldURL.split(":")[0]){
         case "http":  if(!/.\..+\./g.test(oldURL.split("//")[1] )) oldURL = "http://www." + oldURL.split("://")[1];
                       break;
         case "https": if(!/.\..+\./g.test(oldURL.split("//")[1] )) oldURL = "https://www." + oldURL.split("://")[1];
                       break;
-        case "mailto":  if(!/[A-Za-z0-9]+\:.+@.+\../g.test(oldURL)) res.json({'error': "INVALID URL"});
+        case "mailto":  if(!/[A-Za-z0-9]+\:.+@.+\../g.test(oldURL)) res.status(406).json({'error': "INVALID URL"});
                         break;
       }
     } else {
@@ -41,8 +45,8 @@ app.post('/new', function(req, res){
     var shortUrl = '';
     Url.findOne({oldUrl: oldURL}, function (error, url){
       if (url){
-        shortUrl = config.webhost + url.tcID;
-        res.send({'shortUrl': shortUrl});
+        shortUrl = process.env.WEBHOST + url.tcID;
+        res.status(201).send({'shortUrl': shortUrl});
       } else {
         var newUrl = Url({
           oldUrl: oldURL
@@ -51,8 +55,8 @@ app.post('/new', function(req, res){
           if (error){
             console.log(error);
           }
-          shortUrl = config.webhost + newUrl.tcID;
-          res.send({'shortUrl': shortUrl});
+          shortUrl = process.env.WEBHOST + newUrl.tcID;
+          res.status(201).send({'shortUrl': shortUrl});
         });
       }
     });
@@ -62,7 +66,9 @@ app.post('/new', function(req, res){
 app.get('/new/:url*', function(req, res){
   var oldURL = req.url.slice(5);
   console.log(req);
-  if(oldURL == undefined || oldURL == "" || /\s/g.test(oldURL) || !/.\../g.test(oldURL) || /\.\./g.test(oldURL)) res.json({'error': "INVALID URL"});
+  oldURL = oldURL.replace("%3A", ":/");
+  console.log(oldURL);
+  if(oldURL == undefined || oldURL == "" || /\s/g.test(oldURL) || !/.\../g.test(oldURL) || /\.\./g.test(oldURL)) res.status(406).json({'error': "INVALID URL"});
   else {
     if(oldURL.substring(0,5) == "http:" || oldURL.substring(0,6) == "https:" || oldURL.substring(0,7) == "mailto:" || oldURL.substring(0,5) == "news:" || oldURL.substring(0,4) == "ftp:" || oldURL.substring(0,5) == "file:"){
       switch(oldURL.split(":")[0]){
@@ -70,7 +76,7 @@ app.get('/new/:url*', function(req, res){
                       break;
         case "https": if(!/.\..+\./g.test(oldURL.split("//")[1] )) oldURL = "https://www." + oldURL.split("://")[1];
                       break;
-        case "mailto":  if(!/[A-Za-z0-9]+\:.+@.+\../g.test(oldURL)) res.json({'error': "INVALID URL"});
+        case "mailto":  if(!/[A-Za-z0-9]+\:.+@.+\../g.test(oldURL)) res.status(406).json({'error': "INVALID URL"});
                         break;
       }
     } else {
@@ -80,8 +86,8 @@ app.get('/new/:url*', function(req, res){
     var shortUrl = '';
     Url.findOne({oldUrl: oldURL}, function (error, url){
       if (url){
-        shortUrl = config.webhost + url.tcID;
-        res.json({'shortUrl': shortUrl});
+        shortUrl = process.env.WEBHOST + url.tcID;
+        res.status(201).json({'shortUrl': shortUrl});
       } else {
         var newUrl = Url({
           oldUrl: oldURL
@@ -90,8 +96,8 @@ app.get('/new/:url*', function(req, res){
           if (error){
             console.log(error);
           }
-          shortUrl = config.webhost + newUrl.tcID;
-          res.json({'shortUrl': shortUrl});
+          shortUrl = process.env.WEBHOST + newUrl.tcID;
+          res.status(201).json({'shortUrl': shortUrl});
         });
       }
     });
@@ -103,7 +109,7 @@ app.get('/:id', function(req, res){
   if(id != "favicon.ico") {
     Url.findOne({tcID: id}, function (error, url){
       if (url == undefined) {
-        res.redirect(config.webhost);
+        res.status(301).redirect(process.env.WEBHOST);
       } else {
         res.status(301).redirect(url.oldUrl);
       }
